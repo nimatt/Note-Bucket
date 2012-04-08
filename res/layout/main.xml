@@ -1,12 +1,57 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+  Copyright 2012 Mattias Nilsson
+  
+  This file is part of NoteBucket.
+ 
+   NoteBucket is free software: you can redistribute it and/or modify
+   it under the terms of the GNU General Public License as published by
+   the Free Software Foundation, either version 3 of the License, or
+   (at your option) any later version.
+
+   NoteBucket is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU General Public License for more details.
+ 
+   You should have received a copy of the GNU General Public License
+   along with NoteBucket.  If not, see <http://www.gnu.org/licenses/>.
+ -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:orientation="vertical" >
+    android:orientation="horizontal" >
 
-    <TextView
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/hello" />
+    <ListView
+        android:id="@+id/noteList"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scrollbarAlwaysDrawVerticalTrack="true"
+        android:layout_weight="0.4"
+        android:background="@color/list_bg"
+        android:cacheColorHint="@color/list_bg" >
+
+    </ListView>
+    
+    <ImageView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:src="@android:drawable/divider_horizontal_dark"
+    android:layout_width="wrap_content"
+    android:layout_height="fill_parent"
+    android:scaleType="fitXY"
+    android:paddingLeft="1dp"
+    android:paddingRight="1dp"
+    android:paddingBottom="2dp"
+    android:paddingTop="2dp"
+    android:contentDescription="@string/border_description" />
+
+    <ListView
+        android:id="@+id/tagList"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="0.6"
+        android:background="@color/list_bg"
+        android:cacheColorHint="@color/list_bg" >
+    </ListView>
 
 </LinearLayout>

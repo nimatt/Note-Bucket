@@ -18,9 +18,7 @@
    along with NoteBucket.  If not, see <http://www.gnu.org/licenses/>.
  -->
 <resources>
-
-    <string name="hello">Hello World, NoteBucket!</string>
-    <string name="app_name">Note Bucket</string>
-    <string name="border_description">Border between lists</string>
-
+    <color name="list_bg">#eef</color>
+    <color name="list_text">#111</color>
+    
 </resources>

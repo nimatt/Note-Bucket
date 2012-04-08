@@ -21,6 +21,9 @@ package eu.nimatt.notebucket;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.widget.ArrayAdapter;
+import android.widget.ExpandableListView;
+import android.widget.ListView;
 
 /**
  * Initial Activity for NoteBucket, shows list of all notes
@@ -34,5 +37,13 @@ public class NoteBucket extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
+        ListView noteList = (ListView) findViewById(R.id.noteList);
+        noteList.setAdapter(new ArrayAdapter<String>(this, 
+        		R.layout.list_item, 
+        		getResources().getStringArray(R.array.fake_notes)));
+        ListView tagList = (ListView) findViewById(R.id.tagList);
+        tagList.setAdapter(new ArrayAdapter<String>(this, 
+        		R.layout.list_item, 
+        		getResources().getStringArray(R.array.fake_notes)));
     }
 }
