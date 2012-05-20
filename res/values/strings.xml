@@ -22,5 +22,8 @@
     <string name="hello">Hello World, NoteBucket!</string>
     <string name="app_name">Note Bucket</string>
     <string name="border_description">Border between lists</string>
+    <string name="tag_delete_question">Delete %1$s?</string>
+    <string name="yes">yes</string>
+    <string name="no">no</string>
 
 </resources>

@@ -60,9 +60,9 @@ public class NoteData {
 		return newLabel;
 	}
 
-	public void deleteTag(Tag label) {
-		long id = label.getId();
-		System.out.println("Label deleted with id: " + id);
+	public void deleteTag(Tag tag) {
+		long id = tag.getId();
+		System.out.println("Tag deleted with id: " + id);
 		database.delete(DbHelper.TABLE_TAGS, DbHelper.COLUMN_ID
 				+ " = " + id, null);
 	}
