@@ -24,6 +24,7 @@ import java.util.List;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
@@ -52,9 +53,12 @@ public class NoteBucket extends Activity {
         
         data = new NoteData(this);
         data.open();
-        data.createTag("yo");
-        data.createTag("mannen");
-        tags = data.getAllTags();
+    }
+
+	@Override
+	protected void onResume() {
+		super.onResume();
+tags = data.getAllTags();
         
         tags.add(new Tag(-1, "Create new..."));
         
@@ -68,7 +72,11 @@ public class NoteBucket extends Activity {
         tagList.setOnItemClickListener(new OnItemClickListener() {
 			public void onItemClick(AdapterView<?> parent, View view, int position,
 					long id) {
-				
+				Tag tag = tags.get(position);
+				if(tag.getId() == -1) {
+					Intent i = new Intent(getApplicationContext(), CreateTag.class);
+					startActivity(i);
+				}
 				
 			}
 		});
@@ -85,7 +93,7 @@ public class NoteBucket extends Activity {
 				return processed;
 			}
         });
-    }
+	}
 
 	@Override
 	protected void onDestroy() {
