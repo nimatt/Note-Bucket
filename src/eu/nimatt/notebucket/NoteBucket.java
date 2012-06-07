@@ -19,6 +19,7 @@
 
 package eu.nimatt.notebucket;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import android.app.Activity;
@@ -43,7 +44,9 @@ import android.widget.Toast;
 public class NoteBucket extends Activity {
 	NoteData data = null;
 	ListView tagList = null;
+	ListView noteList = null;
 	List<Tag> tags = null;
+	List<Note> notes = null;
 	
     /** Called when the activity is first created. */
     @Override
@@ -54,10 +57,33 @@ public class NoteBucket extends Activity {
         data = new NoteData(this);
         data.open();
         
-        ListView noteList = (ListView) findViewById(R.id.noteList);
-        noteList.setAdapter(new ArrayAdapter<String>(this, 
-        		R.layout.list_item,
-        		getResources().getStringArray(R.array.fake_notes)));
+        noteList = (ListView) findViewById(R.id.noteList);
+
+        noteList.setOnItemClickListener(new OnItemClickListener() {
+			public void onItemClick(AdapterView<?> parent, View view, int position,
+					long id) {
+				Note tag = notes.get(position);
+				if(tag.getId() == -1) {
+					Intent i = new Intent(getApplicationContext(), CreateNote.class);
+					startActivity(i);
+				}
+				
+			}
+		});
+        noteList.setOnItemLongClickListener(new OnItemLongClickListener() {
+			public boolean onItemLongClick(AdapterView<?> parent, View view, int position,
+					long id) {
+				boolean processed = false;
+				Note note = notes.get(position);
+				if (note.getId() != -1) {
+					createDeleteNoteDialog(note);
+					processed = true;
+				}
+				
+				return processed;
+			}
+        });
+        
         tagList = (ListView) findViewById(R.id.tagList);
         
         tagList.setOnItemClickListener(new OnItemClickListener() {
@@ -77,7 +103,7 @@ public class NoteBucket extends Activity {
 				boolean processed = false;
 				Tag tag = tags.get(position);
 				if (tag.getId() != -1) {
-					createDeleteDialog(tag);
+					createDeleteTagDialog(tag);
 					processed = true;
 				}
 				
@@ -91,9 +117,14 @@ public class NoteBucket extends Activity {
 		super.onResume();
 		
 		tags = data.getAllTags();
-        tags.add(new Tag(-1, "Create new..."));
+        tags.add(new Tag(-1, getString(R.string.create_new)));
         tagList.setAdapter(new ArrayAdapter<Tag>(this, 
         		R.layout.list_item, tags));
+        
+        notes = data.getAllNotes();
+        notes.add(new Note(-1, getString(R.string.create_new)));
+        noteList.setAdapter(new ArrayAdapter<Note>(this, 
+        		R.layout.list_item, notes));
 	}
 
 	@Override
@@ -102,7 +133,7 @@ public class NoteBucket extends Activity {
 		data.close();
 	}
     
-	private void createDeleteDialog(final Tag tag) {
+	private void createDeleteTagDialog(final Tag tag) {
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
 		builder.setMessage(String.format(getResources().getString(R.string.tag_delete_question),
 				tag.getTag()))
@@ -113,6 +144,26 @@ public class NoteBucket extends Activity {
 		        	   tags.remove(tag);
 		        	   tagList.setAdapter(new ArrayAdapter<Tag>(getApplicationContext(), 
 		        			   R.layout.list_item, tags));
+		           }
+		       })
+		       .setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
+		           public void onClick(DialogInterface dialog, int id) {
+		                dialog.cancel();
+		           }
+		       });
+		builder.create().show();
+	}
+	
+	private void createDeleteNoteDialog(final Note note) {
+		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+		builder.setMessage(getString(R.string.note_delete_question))
+		       .setCancelable(false)
+		       .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+		           public void onClick(DialogInterface dialog, int id) {
+		        	   data.deleteNote(note);
+		        	   notes.remove(note);
+		        	   noteList.setAdapter(new ArrayAdapter<Note>(getApplicationContext(), 
+		        			   R.layout.list_item, notes));
 		           }
 		       })
 		       .setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {

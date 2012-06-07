@@ -23,13 +23,19 @@
     <string name="app_name">Note Bucket</string>
     <string name="border_description">Border between lists</string>
     <string name="tag_delete_question">Delete %1$s?</string>
+    <string name="note_delete_question">Delete note?</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
     <string name="cancel">Cancel</string>
     <string name="done">Done</string>
+    <string name="create_note_hint">Note</string>
+    <string name="create_note_title">Create Note</string>
     <string name="create_tag_hint">Tag name</string>
+    <string name="create_tag_title">Create Tag</string>
+    <string name="create_new">Create new&#8230;</string>
     
     <string name="create_tag_tag">NoteBucket_CreateTag</string>
+    <string name="create_note_tag">NoteBucket_CreateNote</string>
 
     <string name="db_error">Database Error</string>
 </resources>

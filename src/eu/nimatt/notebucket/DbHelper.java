@@ -31,12 +31,19 @@ public class DbHelper extends SQLiteOpenHelper {
 	public static final String COLUMN_ID = "_id";
 	public static final String COLUMN_TAG = "tag";
 	
+	public static final String TABLE_NOTES = "notes";
+	public static final String COLUMN_NOTE = "note";
+	
 	private static final String DATABASE_NAME = "notes.db";
 	private static final int DATABASE_VERSION = 1;
 	
-	private static final String DATABASE_CREATE = "create table "
+	private static final String DATABASE_CREATE_TAGS = "create table "
 			+ TABLE_TAGS + "( " + COLUMN_ID
 			+ " integer primary key autoincrement, " + COLUMN_TAG
+			+ " text not null);";
+	private static final String DATABASE_CREATE_NOTES = "create table "
+			+ TABLE_NOTES + "( " + COLUMN_ID
+			+ " integer primary key autoincrement, " + COLUMN_NOTE
 			+ " text not null);";
 	
 	public DbHelper(Context context) {
@@ -48,7 +55,9 @@ public class DbHelper extends SQLiteOpenHelper {
 
 	@Override
 	public void onCreate(SQLiteDatabase database) {
-		database.execSQL(DATABASE_CREATE);
+		Log.i("DB", "Creating DB");
+		database.execSQL(DATABASE_CREATE_TAGS);
+		database.execSQL(DATABASE_CREATE_NOTES);
 	}
 
 	@Override

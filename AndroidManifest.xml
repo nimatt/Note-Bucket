@@ -23,6 +23,10 @@
             android:name=".CreateTag"
             android:theme="@android:style/Theme.NoTitleBar">
         </activity>
+        <activity 
+            android:name=".CreateNote"
+            android:theme="@android:style/Theme.NoTitleBar">
+        </activity>
     </application>
 
 </manifest>
