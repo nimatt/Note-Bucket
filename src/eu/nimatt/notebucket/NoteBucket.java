@@ -53,22 +53,13 @@ public class NoteBucket extends Activity {
         
         data = new NoteData(this);
         data.open();
-    }
-
-	@Override
-	protected void onResume() {
-		super.onResume();
-tags = data.getAllTags();
-        
-        tags.add(new Tag(-1, "Create new..."));
         
         ListView noteList = (ListView) findViewById(R.id.noteList);
         noteList.setAdapter(new ArrayAdapter<String>(this, 
         		R.layout.list_item,
         		getResources().getStringArray(R.array.fake_notes)));
         tagList = (ListView) findViewById(R.id.tagList);
-        tagList.setAdapter(new ArrayAdapter<Tag>(this, 
-        		R.layout.list_item, tags));
+        
         tagList.setOnItemClickListener(new OnItemClickListener() {
 			public void onItemClick(AdapterView<?> parent, View view, int position,
 					long id) {
@@ -93,6 +84,16 @@ tags = data.getAllTags();
 				return processed;
 			}
         });
+    }
+
+	@Override
+	protected void onResume() {
+		super.onResume();
+		
+		tags = data.getAllTags();
+        tags.add(new Tag(-1, "Create new..."));
+        tagList.setAdapter(new ArrayAdapter<Tag>(this, 
+        		R.layout.list_item, tags));
 	}
 
 	@Override
