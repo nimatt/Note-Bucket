@@ -17,9 +17,12 @@
    You should have received a copy of the GNU General Public License
    along with NoteBucket.  If not, see <http://www.gnu.org/licenses/>.
  -->
-<resources>
-    <color name="list_bg">#eef</color>
-    <color name="list_text">#111</color>
-    <color name="selected">#39be39</color>
-    
-</resources>
+<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:padding="10dp"
+    android:textSize="16sp"
+    android:maxLines="2"
+    android:ellipsize="end"
+    android:textColor="@color/list_text" >
+</TextView>

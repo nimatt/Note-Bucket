@@ -19,13 +19,13 @@
 
 package eu.nimatt.notebucket;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
@@ -33,7 +33,6 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.Toast;
 
 /**
  * Initial Activity for NoteBucket, shows list of all notes
@@ -67,7 +66,6 @@ public class NoteBucket extends Activity {
 					Intent i = new Intent(getApplicationContext(), CreateNote.class);
 					startActivity(i);
 				}
-				
 			}
 		});
         noteList.setOnItemLongClickListener(new OnItemLongClickListener() {
@@ -85,6 +83,7 @@ public class NoteBucket extends Activity {
         });
         
         tagList = (ListView) findViewById(R.id.tagList);
+        tagList.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
         
         tagList.setOnItemClickListener(new OnItemClickListener() {
 			public void onItemClick(AdapterView<?> parent, View view, int position,
@@ -106,7 +105,6 @@ public class NoteBucket extends Activity {
 					createDeleteTagDialog(tag);
 					processed = true;
 				}
-				
 				return processed;
 			}
         });
@@ -119,12 +117,12 @@ public class NoteBucket extends Activity {
 		tags = data.getAllTags();
         tags.add(new Tag(-1, getString(R.string.create_new)));
         tagList.setAdapter(new ArrayAdapter<Tag>(this, 
-        		R.layout.list_item, tags));
+        		R.layout.taglist_item, tags));
         
         notes = data.getAllNotes();
         notes.add(new Note(-1, getString(R.string.create_new)));
         noteList.setAdapter(new ArrayAdapter<Note>(this, 
-        		R.layout.list_item, notes));
+        		R.layout.notelist_item, notes));
 	}
 
 	@Override
@@ -143,7 +141,7 @@ public class NoteBucket extends Activity {
 		        	   data.deleteTag(tag);
 		        	   tags.remove(tag);
 		        	   tagList.setAdapter(new ArrayAdapter<Tag>(getApplicationContext(), 
-		        			   R.layout.list_item, tags));
+		        			   R.layout.taglist_item, tags));
 		           }
 		       })
 		       .setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
@@ -163,7 +161,7 @@ public class NoteBucket extends Activity {
 		        	   data.deleteNote(note);
 		        	   notes.remove(note);
 		        	   noteList.setAdapter(new ArrayAdapter<Note>(getApplicationContext(), 
-		        			   R.layout.list_item, notes));
+		        			   R.layout.notelist_item, notes));
 		           }
 		       })
 		       .setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
