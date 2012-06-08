@@ -19,14 +19,15 @@
 
 package eu.nimatt.notebucket;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
+import android.util.SparseBooleanArray;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -93,7 +94,9 @@ public class NoteBucket extends Activity {
 					Intent i = new Intent(getApplicationContext(), CreateTag.class);
 					startActivity(i);
 				}
-				
+				else {
+					updateNoteList();
+				}
 			}
 		});
         tagList.setOnItemLongClickListener(new OnItemLongClickListener() {
@@ -119,16 +122,38 @@ public class NoteBucket extends Activity {
         tagList.setAdapter(new ArrayAdapter<Tag>(this, 
         		R.layout.taglist_item, tags));
         
-        notes = data.getAllNotes();
-        notes.add(new Note(-1, getString(R.string.create_new)));
-        noteList.setAdapter(new ArrayAdapter<Note>(this, 
-        		R.layout.notelist_item, notes));
+        updateNoteList();
 	}
 
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
 		data.close();
+	}
+	
+	private void updateNoteList() {
+		List<Tag> selectedTags = getSelectedTags();
+		
+		notes = data.getFilteredNotes(selectedTags);
+        notes.add(new Note(-1, getString(R.string.create_new)));
+        noteList.setAdapter(new ArrayAdapter<Note>(this, 
+        		R.layout.notelist_item, notes));
+	}
+	
+	private List<Tag> getSelectedTags() {
+		List<Tag> selectedTags = new ArrayList<Tag>();
+		SparseBooleanArray checkedItems = tagList.getCheckedItemPositions();
+		if (checkedItems != null) {
+			for (int i = 0; i < checkedItems.size(); ++i) {
+				final int position = checkedItems.keyAt(i);
+				final boolean isSelected= checkedItems.valueAt(i);
+				if (isSelected) {
+					selectedTags.add(tags.get(position));
+				}
+			}
+		}
+		
+		return selectedTags;
 	}
     
 	private void createDeleteTagDialog(final Tag tag) {

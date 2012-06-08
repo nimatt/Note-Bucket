@@ -21,7 +21,6 @@ package eu.nimatt.notebucket;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteDatabase.CursorFactory;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
@@ -34,6 +33,10 @@ public class DbHelper extends SQLiteOpenHelper {
 	public static final String TABLE_NOTES = "notes";
 	public static final String COLUMN_NOTE = "note";
 	
+	public static final String TABLE_CONNECTIONS = "connections";
+	public static final String COLUMN_TAGID = "tag";
+	public static final String COLUMN_NOTEID = "note";
+	
 	private static final String DATABASE_NAME = "notes.db";
 	private static final int DATABASE_VERSION = 1;
 	
@@ -45,6 +48,12 @@ public class DbHelper extends SQLiteOpenHelper {
 			+ TABLE_NOTES + "( " + COLUMN_ID
 			+ " integer primary key autoincrement, " + COLUMN_NOTE
 			+ " text not null);";
+	// TODO: Connect to note and tag tables
+	private static final String DATABASE_CREATE_CONNECTIONS = "create table "
+			+ TABLE_CONNECTIONS + "( " + COLUMN_ID
+			+ " integer primary key autoincrement, " + COLUMN_NOTEID
+			+ " integer not null, " + COLUMN_TAGID
+			+ " integer not null);";
 	
 	public DbHelper(Context context) {
 		super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -58,6 +67,7 @@ public class DbHelper extends SQLiteOpenHelper {
 		Log.i("DB", "Creating DB");
 		database.execSQL(DATABASE_CREATE_TAGS);
 		database.execSQL(DATABASE_CREATE_NOTES);
+		database.execSQL(DATABASE_CREATE_CONNECTIONS);
 	}
 
 	@Override

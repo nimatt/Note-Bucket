@@ -27,6 +27,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 
 public class NoteData {
 	private SQLiteDatabase database;
@@ -75,18 +76,28 @@ public class NoteData {
 		cursor.close();
 		return newNote;
 	}
+	
+	public void createConnection(Long note, Long tag) {
+		ContentValues values = new ContentValues();
+		values.put(DbHelper.COLUMN_NOTEID, note);
+		values.put(DbHelper.COLUMN_TAGID, tag);
+		database.insert(DbHelper.TABLE_CONNECTIONS, null, values);
+	}
+
 
 
 	public void deleteTag(Tag tag) {
 		long id = tag.getId();
-		System.out.println("Tag deleted with id: " + id);
+		database.delete(DbHelper.TABLE_CONNECTIONS, DbHelper.COLUMN_TAGID
+				+ " = " + tag.getId(), null);
 		database.delete(DbHelper.TABLE_TAGS, DbHelper.COLUMN_ID
 				+ " = " + id, null);
 	}
 	
 	public void deleteNote(Note note) {
 		long id = note.getId();
-		System.out.println("Note deleted with id: " + id);
+		database.delete(DbHelper.TABLE_CONNECTIONS, DbHelper.COLUMN_NOTEID
+				+ " = " + note.getId(), null);
 		database.delete(DbHelper.TABLE_NOTES, DbHelper.COLUMN_ID
 				+ " = " + id, null);
 	}
@@ -124,6 +135,52 @@ public class NoteData {
 		cursor.close();
 		return notes;
 	}
+	
+	public List<Note> getFilteredNotes(List<Tag> tags) {
+		List<Note> notes = new ArrayList<Note>();
+		Cursor cursor = null;
+		
+		if(tags != null && tags.size() > 0) {
+			cursor = database.rawQuery("SELECT " + DbHelper.TABLE_NOTES
+					+ "." + DbHelper.COLUMN_ID + ", " + DbHelper.TABLE_NOTES
+					+ "." + DbHelper.COLUMN_NOTE + ", " + DbHelper.TABLE_CONNECTIONS
+					+ "." + DbHelper.COLUMN_TAGID + " FROM "
+					+ DbHelper.TABLE_NOTES + " JOIN " + DbHelper.TABLE_CONNECTIONS
+					+ " ON  (" + DbHelper.TABLE_NOTES + "."
+					+ DbHelper.COLUMN_ID + " = " + DbHelper.TABLE_CONNECTIONS
+					+ "." + DbHelper.COLUMN_NOTEID + ")", null);
+		} else {
+			cursor = database.query(DbHelper.TABLE_NOTES,
+					allNoteColumns, null, null, null, null, null);
+		}
+
+		cursor.moveToFirst();
+		while (!cursor.isAfterLast()) {
+			Note label = cursorToNote(cursor);
+			int index = notes.indexOf(label);
+			if (index == -1) {
+				notes.add(label);
+			} else {
+				notes.get(index).addTag(label.getTags().get(0));
+			}
+			cursor.moveToNext();
+		}
+		
+		cursor.close();
+		
+		for (int i=0; i < tags.size(); i++) {
+			int j=0;
+			while (j < notes.size()) {
+				if (!notes.get(j).hasTag(tags.get(i).getId())) {
+					notes.remove(j);
+				} else {
+					j++;
+				}
+			}
+		}
+		
+		return notes;
+	}
 
 	private Tag cursorToTag(Cursor cursor) {
 		Tag label = new Tag(cursor.getLong(0), cursor.getString(1));
@@ -131,7 +188,10 @@ public class NoteData {
 	}
 	
 	private Note cursorToNote(Cursor cursor) {
-		Note label = new Note(cursor.getLong(0), cursor.getString(1));
-		return label;
+		Note note = new Note(cursor.getLong(0), cursor.getString(1));
+		if (cursor.getColumnCount() > 2) {
+			note.addTag(cursor.getLong(2));
+		}
+		return note;
 	}
 }

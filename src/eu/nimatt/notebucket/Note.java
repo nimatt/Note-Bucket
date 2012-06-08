@@ -19,9 +19,19 @@
 
 package eu.nimatt.notebucket;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Set;
+
+import android.util.Log;
+
+
 public class Note {
 	private long id;
 	private String note;
+	private Set<Long> tagIds = new HashSet<Long>();
 
 	public Note() {
 		this(0, "");
@@ -30,6 +40,25 @@ public class Note {
 	public Note(long id, String note) {
 		this.id = id;
 		this.note = note;
+	}
+	
+	public void addTag(long tagId) {
+		tagIds.add(tagId);
+	}
+	
+	public boolean hasTag(long tagId) {
+		return tagIds.contains(tagId);
+	}
+	
+	public List<Long> getTags() {
+		Iterator<Long> iter = tagIds.iterator();
+		List<Long> list = new ArrayList<Long>();
+		
+		while (iter.hasNext()) {
+			list.add(iter.next());
+		}
+		
+		return list;
 	}
 	
 	public long getId() {
@@ -51,5 +80,19 @@ public class Note {
 	@Override
 	public String toString() {
 		return note;
+	}
+	
+	@Override
+	public boolean equals(Object o) {
+		boolean equals = false;
+		
+		if (o instanceof Note) {
+			Note oNote = (Note) o;
+			if (oNote.id == id) {
+				equals = true;
+			}
+		}
+		
+		return equals;
 	}
 }

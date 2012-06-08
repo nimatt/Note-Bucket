@@ -33,6 +33,7 @@
     <string name="create_tag_hint">Tag name</string>
     <string name="create_tag_title">Create Tag</string>
     <string name="create_new">Create new&#8230;</string>
+    <string name="connect_to_notes">Connect to notes</string>
     
     <string name="create_tag_tag">NoteBucket_CreateTag</string>
     <string name="create_note_tag">NoteBucket_CreateNote</string>

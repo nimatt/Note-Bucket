@@ -28,6 +28,7 @@
         android:layout_height="match_parent"
         android:scrollbarAlwaysDrawVerticalTrack="true"
         android:layout_weight="0.4"
+        android:choiceMode="none"
         android:background="@color/list_bg"
         android:cacheColorHint="@color/list_bg" >
 
